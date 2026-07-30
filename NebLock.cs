@@ -1,9 +1,9 @@
 ﻿using Sandbox.ModAPI;
 using VRage.Game.Components;
-using VRage.Game;
 using VRage.Utils;
 using System;
 using System.Collections.Generic;
+using VRageMath;
 
 namespace NebLock
 {
@@ -30,7 +30,9 @@ namespace NebLock
                 {
                     foreach (var track in Tracks)
                     {
-                        track.Key.TrackTarget(MyAPIGateway.Entities.GetEntityById(track.Value.MainGridEntityId));
+                        var e = MyAPIGateway.Entities.GetEntityById(track.Value.MainGridEntityId);
+                        var vel = e.Physics?.LinearVelocity ?? Vector3.Zero;
+                        track.Key.TrackTarget(e.GetPosition(), vel);
                     }
                 }
             } catch (Exception e)

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netframework48</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <RootNamespace>NebLock</RootNamespace>
     <LangVersion>6</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

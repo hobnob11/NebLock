@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Sandbox.Game.Entities;
-using Sandbox.Game.Entities.Cube;
 using Sandbox.ModAPI;
-using VRage.Game.ModAPI;
 using VRage.Utils;
 
 namespace NebLock
