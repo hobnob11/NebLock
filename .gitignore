@@ -1,0 +1,5 @@
+mdk.local.ini
+.vs
+*.dll
+*.pdb
+obj
