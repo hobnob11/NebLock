@@ -19,6 +19,7 @@ namespace NebLock
 
         protected override void UnloadData()
         {
+            NebLockTerminalControls.RadarEntries = null;
         }
     }
 }

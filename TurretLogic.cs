@@ -7,7 +7,7 @@ using VRage.ObjectBuilders;
 namespace NebLock
 {
     [MyEntityComponentDescriptor(typeof(MyObjectBuilder_Cockpit), false)]
-    public class CockpitLogic : MyGameLogicComponent
+    public class TurretLogic : MyGameLogicComponent
     {
         public override void Init(MyObjectBuilder_EntityBase objectBuilder)
         {
