@@ -6,6 +6,7 @@ using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.ModAPI;
 using VRage.Game.ModAPI;
+using VRage.Utils;
 
 namespace NebLock
 {
@@ -14,6 +15,8 @@ namespace NebLock
         static bool Done = false;
 
         static public List<NebRadarAPI.API.NebRadarAPI.RadarEntry> RadarEntries = new List<NebRadarAPI.API.NebRadarAPI.RadarEntry>();
+        static public Dictionary<IMyLargeTurretBase, NebRadarAPI.API.NebRadarAPI.RadarEntry> TurretTargets = new Dictionary<IMyLargeTurretBase, NebRadarAPI.API.NebRadarAPI.RadarEntry>();
+
 
         public static void DoOnce()
         {
@@ -21,13 +24,21 @@ namespace NebLock
                 return;
             Done = true;
 
-            var action = MyAPIGateway.TerminalControls.CreateAction<Sandbox.ModAPI.IMyLargeTurretBase>("NebLock_LockTarget");
-            action.Name = new StringBuilder("Focus on Locked Radar Target");
-            action.Icon = @"Textures\GUI\Icons\Actions\Toggle.dds";
-            action.Action = OnLockButtonPressed;
-            action.Enabled = (block) => true;
+            var actionLock = MyAPIGateway.TerminalControls.CreateAction<Sandbox.ModAPI.IMyLargeTurretBase>("NebLock_LockTarget");
+            actionLock.Name = new StringBuilder("Focus on Locked Radar Target");
+            actionLock.Icon = @"Textures\GUI\Icons\Actions\Toggle.dds";
+            actionLock.Action = OnLockButtonPressed;
+            actionLock.Enabled = (block) => true;
 
-            MyAPIGateway.TerminalControls.AddAction<Sandbox.ModAPI.IMyLargeTurretBase>(action);
+            MyAPIGateway.TerminalControls.AddAction<Sandbox.ModAPI.IMyLargeTurretBase>(actionLock);
+
+            var actionUnlock = MyAPIGateway.TerminalControls.CreateAction<Sandbox.ModAPI.IMyLargeTurretBase>("NebLock_UnlockTarget");
+            actionUnlock.Name = new StringBuilder("Stop Focusing on Radar Target");
+            actionUnlock.Icon = @"Textures\GUI\Icons\Actions\Toggle.dds";
+            actionUnlock.Action = OnUnlockLockButtonPressed;
+            actionUnlock.Enabled = (block) => true;
+
+            MyAPIGateway.TerminalControls.AddAction<Sandbox.ModAPI.IMyLargeTurretBase>(actionUnlock);
         }
 
         private static void OnLockButtonPressed(IMyTerminalBlock block)
@@ -44,7 +55,7 @@ namespace NebLock
                 }
                 RadarEntries.Clear();
                 NebRadarAPI.API.NebRadarAPI.GetAllRadarEntries(block.CubeGrid, RadarEntries);
-                
+
                 MyAPIGateway.Utilities.ShowNotification($"Found {RadarEntries.Count} entries", 2000);
 
                 NebRadarAPI.API.NebRadarAPI.RadarEntry target = default(NebRadarAPI.API.NebRadarAPI.RadarEntry);
@@ -63,13 +74,25 @@ namespace NebLock
                 }
 
                 var turret = block as IMyLargeTurretBase;
-                turret.TrackTarget(target.Position, target.Velocity);
+                TurretTargets[turret] = target;
+                MyAPIGateway.Utilities.ShowNotification($"TurretTargets Count: {TurretTargets.Count}", 2000);
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
-                MyAPIGateway.Utilities.ShowMessage("Spahget", e.Message);
-                MyAPIGateway.Utilities.ShowMessage("Spahget", e.Source);
-                MyAPIGateway.Utilities.ShowMessage("Spahget", e.StackTrace);
+                MyLog.Default.WriteLineAndConsole(e.ToString());
+            }
+        }
+        private static void OnUnlockLockButtonPressed(IMyTerminalBlock block)
+        {
+            try
+            {
+                var turret = block as IMyLargeTurretBase;
+                TurretTargets.Remove(turret);
+            }
+            catch (Exception e)
+            {
+                MyLog.Default.WriteLineAndConsole(e.ToString());
             }
         }
     }
