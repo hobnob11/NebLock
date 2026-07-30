@@ -3,12 +3,15 @@ using VRage.Game.Components;
 using VRage.Game;
 using VRage.Utils;
 using System;
+using System.Collections.Generic;
 
 namespace NebLock
 {
     [MySessionComponentDescriptor(MyUpdateOrder.Simulation)]
     public class NebLockSession : MySessionComponentBase
     {
+        static public Dictionary<IMyLargeTurretBase, NebRadarAPI.API.NebRadarAPI.RadarEntry> Tracks = new Dictionary<IMyLargeTurretBase, NebRadarAPI.API.NebRadarAPI.RadarEntry>();
+
         public override void LoadData()
         {
             NebRadarAPI.API.NebRadarAPI.Load(OnRadarAPIReady);
@@ -23,15 +26,16 @@ namespace NebLock
         {
             try
             {
-                if (NebLockTerminalControls.TurretTargets.Count > 0)
+                if (Tracks.Count > 0)
                 {
-                    foreach (var turretTarget in NebLockTerminalControls.TurretTargets)
+                    foreach (var track in Tracks)
                     {
-                        turretTarget.Key.TrackTarget(turretTarget.Value.Position, turretTarget.Value.Velocity);
+                        track.Key.TrackTarget(MyAPIGateway.Entities.GetEntityById(track.Value.MainGridEntityId));
                     }
                 }
             } catch (Exception e)
             {
+                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged!", 2000);
                 MyLog.Default.WriteLineAndConsole(e.ToString());
             }
         }

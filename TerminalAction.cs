@@ -15,8 +15,6 @@ namespace NebLock
         static bool Done = false;
 
         static public List<NebRadarAPI.API.NebRadarAPI.RadarEntry> RadarEntries = new List<NebRadarAPI.API.NebRadarAPI.RadarEntry>();
-        static public Dictionary<IMyLargeTurretBase, NebRadarAPI.API.NebRadarAPI.RadarEntry> TurretTargets = new Dictionary<IMyLargeTurretBase, NebRadarAPI.API.NebRadarAPI.RadarEntry>();
-
 
         public static void DoOnce()
         {
@@ -74,12 +72,13 @@ namespace NebLock
                 }
 
                 var turret = block as IMyLargeTurretBase;
-                TurretTargets[turret] = target;
-                MyAPIGateway.Utilities.ShowNotification($"TurretTargets Count: {TurretTargets.Count}", 2000);
+                NebLockSession.Tracks[turret] = target;
+                MyAPIGateway.Utilities.ShowNotification($"Tracks Count: {NebLockSession.Tracks.Count}", 2000);
 
             }
             catch (Exception e)
             {
+                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged!", 2000);
                 MyLog.Default.WriteLineAndConsole(e.ToString());
             }
         }
@@ -88,10 +87,12 @@ namespace NebLock
             try
             {
                 var turret = block as IMyLargeTurretBase;
-                TurretTargets.Remove(turret);
+                NebLockSession.Tracks.Remove(turret);
+                MyAPIGateway.Utilities.ShowNotification($"Track Removed, Count: {NebLockSession.Tracks.Count}", 2000);
             }
             catch (Exception e)
             {
+                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged!", 2000);
                 MyLog.Default.WriteLineAndConsole(e.ToString());
             }
         }
