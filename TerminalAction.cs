@@ -42,7 +42,7 @@ namespace NebLock
                 {
                     MyAPIGateway.Utilities.ShowNotification("No Radar Found", 2000); return;
                 }
-                
+                RadarEntries.Clear();
                 NebRadarAPI.API.NebRadarAPI.GetAllRadarEntries(block.CubeGrid, RadarEntries);
                 
                 MyAPIGateway.Utilities.ShowNotification($"Found {RadarEntries.Count} entries", 2000);
