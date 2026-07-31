@@ -4,14 +4,14 @@ using VRage.Utils;
 using System;
 using System.Collections.Generic;
 using VRageMath;
+using RadarEntry = NebRadarAPI.API.NebRadarAPI.RadarEntry;
 
 namespace NebLock
 {
     [MySessionComponentDescriptor(MyUpdateOrder.Simulation)]
     public class NebLockSession : MySessionComponentBase
     {
-        static public Dictionary<IMyLargeTurretBase, NebRadarAPI.API.NebRadarAPI.RadarEntry> Tracks = new Dictionary<IMyLargeTurretBase, NebRadarAPI.API.NebRadarAPI.RadarEntry>();
-
+        static public Dictionary<IMyLargeTurretBase, RadarEntry> Tracks = new Dictionary<IMyLargeTurretBase, RadarEntry>();
         public override void LoadData()
         {
             NebRadarAPI.API.NebRadarAPI.Load(OnRadarAPIReady);
@@ -45,6 +45,7 @@ namespace NebLock
         protected override void UnloadData()
         {
             NebLockTerminalControls.RadarEntries = null;
+            Tracks = null;
         }
     }
 }

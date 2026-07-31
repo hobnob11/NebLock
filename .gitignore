@@ -3,3 +3,4 @@ mdk.local.ini
 *.dll
 *.pdb
 obj
+bin
