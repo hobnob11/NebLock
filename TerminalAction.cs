@@ -67,8 +67,8 @@ namespace NebLock
                 }
 
                 var turret = block as IMyLargeTurretBase;
-                NebLockSession.Tracks[turret] = target;
-                MyAPIGateway.Utilities.ShowNotification($"Tracks Count: {NebLockSession.Tracks.Count}", 2000);
+                NebLock.Tracks[turret] = target;
+                MyAPIGateway.Utilities.ShowNotification($"Tracks Count: {NebLock.Tracks.Count}", 2000);
 
             }
             catch (Exception e)
@@ -82,8 +82,8 @@ namespace NebLock
             try
             {
                 var turret = block as IMyLargeTurretBase;
-                NebLockSession.Tracks.Remove(turret);
-                MyAPIGateway.Utilities.ShowNotification($"Track Removed, Count: {NebLockSession.Tracks.Count}", 2000);
+                NebLock.Tracks.Remove(turret);
+                MyAPIGateway.Utilities.ShowNotification($"Track Removed, Count: {NebLock.Tracks.Count}", 2000);
             }
             catch (Exception e)
             {
