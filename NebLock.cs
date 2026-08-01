@@ -8,22 +8,50 @@ using RadarEntry = NebRadarAPI.API.NebRadarAPI.RadarEntry;
 using Sandbox.Game.Entities;
 using System.Net.Security;
 using System.Linq;
+using VRage.Game.Entity;
+using Sandbox.Game.Screens.Helpers;
+using System.Reflection;
 
 namespace NebLock
 {
     [MySessionComponentDescriptor(MyUpdateOrder.Simulation)]
     public class NebLock : MySessionComponentBase
     {
+        static private bool mpActive;
+        static private bool server;
+        static private bool client;
+        static private bool actionsAdded = false;
         static public Dictionary<IMyLargeTurretBase, RadarEntry> Tracks = new Dictionary<IMyLargeTurretBase, RadarEntry>();
         static readonly private List<IMyLargeTurretBase> deadTracks = new List<IMyLargeTurretBase>();
         public override void LoadData()
         {
-            NebRadarAPI.API.NebRadarAPI.Load(OnRadarAPIReady);
-            NebLockTerminalControls.DoOnce();
+            mpActive = MyAPIGateway.Multiplayer.MultiplayerActive;
+            server = (mpActive && MyAPIGateway.Multiplayer.IsServer) || !mpActive;
+            client = (mpActive && !MyAPIGateway.Utilities.IsDedicated) || !mpActive;
+
+            if(server)
+            {
+                NebRadarAPI.API.NebRadarAPI.Load(OnRadarAPIReady);
+            }
+            if (client)
+            {
+                MyEntities.OnEntityCreate += OnEntityCreate;
+            }
         }
         private void OnRadarAPIReady()
         {
             MyAPIGateway.Utilities.ShowNotification("NebRadar API connected", 2000);
+        }
+
+        private void OnEntityCreate(MyEntity entity)
+        {
+            if (entity is IMyLargeTurretBase && !actionsAdded)
+            {
+                actionsAdded = true;
+                MyAPIGateway.Utilities.InvokeOnGameThread(() => TerminalActions.AddActions());
+                MyEntities.OnEntityCreate -= OnEntityCreate;
+                MyAPIGateway.Utilities.ShowNotification("hellloooooo", 2000);
+            }
         }
 
         public override void Simulate()
@@ -60,7 +88,7 @@ namespace NebLock
 
         protected override void UnloadData()
         {
-            NebLockTerminalControls.RadarEntries = null;
+            TerminalActions.RadarEntries = null;
             Tracks = null;
         }
     }

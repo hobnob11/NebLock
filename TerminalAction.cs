@@ -8,17 +8,12 @@ using RadarEntry = NebRadarAPI.API.NebRadarAPI.RadarEntry;
 
 namespace NebLock
 {
-    public static class NebLockTerminalControls
+    public static class TerminalActions
     {
-        static bool Done = false;
-
         static public List<RadarEntry> RadarEntries = new List<RadarEntry>();
 
-        public static void DoOnce()
+        public static void AddActions()
         {
-            if (Done)
-                return;
-            Done = true;
 
             var actionLock = MyAPIGateway.TerminalControls.CreateAction<IMyLargeTurretBase>("NebLock_LockTarget");
             actionLock.Name = new StringBuilder("Focus on Locked Radar Target");

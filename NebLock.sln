@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34728.176
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NebLock", "NebLock.csproj", "{B3638193-628D-4DD1-902E-593774AFEECB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3638193-628D-4DD1-902E-593774AFEECB}.Debug|x64.ActiveCfg = Debug|x64
+		{B3638193-628D-4DD1-902E-593774AFEECB}.Debug|x64.Build.0 = Debug|x64
+		{B3638193-628D-4DD1-902E-593774AFEECB}.Release|x64.ActiveCfg = Release|x64
+		{B3638193-628D-4DD1-902E-593774AFEECB}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C4A66B99-8AA5-4202-BDE6-98CBB76D77E2}
+	EndGlobalSection
+EndGlobal
