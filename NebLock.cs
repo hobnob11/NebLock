@@ -11,6 +11,7 @@ using System.Linq;
 using VRage.Game.Entity;
 using Sandbox.Game.Screens.Helpers;
 using System.Reflection;
+using Sandbox.ModAPI.Interfaces.Terminal;
 
 namespace NebLock
 {
@@ -35,7 +36,7 @@ namespace NebLock
             }
             if (client)
             {
-                MyEntities.OnEntityCreate += OnEntityCreate;
+                MyAPIGateway.TerminalControls.CustomActionGetter += OnCustomActionGet;
             }
         }
         private void OnRadarAPIReady()
@@ -43,13 +44,13 @@ namespace NebLock
             MyAPIGateway.Utilities.ShowNotification("NebRadar API connected", 2000);
         }
 
-        private void OnEntityCreate(MyEntity entity)
+        private void OnCustomActionGet(IMyTerminalBlock block, List<IMyTerminalAction> actions)
         {
-            if (entity is IMyLargeTurretBase && !actionsAdded)
+            if (!actionsAdded)
             {
                 actionsAdded = true;
-                MyAPIGateway.Utilities.InvokeOnGameThread(() => TerminalActions.AddActions());
-                MyEntities.OnEntityCreate -= OnEntityCreate;
+                TerminalActions.AddActions();
+                MyAPIGateway.TerminalControls.CustomActionGetter -= OnCustomActionGet;
                 MyAPIGateway.Utilities.ShowNotification("hellloooooo", 2000);
             }
         }
