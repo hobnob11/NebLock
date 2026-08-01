@@ -14,13 +14,7 @@ namespace NebLock
     public class TerminalActions
     {
         public static TerminalActions I = new TerminalActions();
-        public bool actionsAdded = false;
-        PacketTurretTrack PacketTurretTrack = null;
-        
-        public void LoadData(NebLock sessionInstance)
-        {
-            PacketTurretTrack = new PacketTurretTrack();
-        }
+        public bool actionsAdded = false;        
         public void AddActions(MyEntity e)
         {
             if(e is IMyLargeTurretBase && !actionsAdded)
@@ -49,8 +43,8 @@ namespace NebLock
             try
             {
                 var turret = block as IMyLargeTurretBase;
-                PacketTurretTrack.Setup(turret.EntityId, true);
-                
+                NebLock.I.PacketTurretTrack.Setup(turret.EntityId, true);
+                NebLock.I.Net.SendToServer(NebLock.I.PacketTurretTrack);
                 MyAPIGateway.Utilities.ShowNotification($"Lock button pressed clientside", 2000);
             }
             catch (Exception e)
@@ -66,7 +60,8 @@ namespace NebLock
             try
             {
                 var turret = block as IMyLargeTurretBase;
-
+                NebLock.I.PacketTurretTrack.Setup(turret.EntityId, false);
+                NebLock.I.Net.SendToServer(NebLock.I.PacketTurretTrack);
                 MyAPIGateway.Utilities.ShowNotification($"Unlock button pressed clientside", 2000);
             }
             catch (Exception e)

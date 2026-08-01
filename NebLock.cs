@@ -8,6 +8,7 @@ using RadarEntry = NebRadarAPI.API.NebRadarAPI.RadarEntry;
 using Sandbox.Game.Entities;
 using Digi.NetworkLib;
 using Sandbox.Definitions;
+using EmptyKeys.UserInterface.Generated.ContractsBlockView_Gamepad_Bindings;
 
 
 namespace NebLock
@@ -15,6 +16,8 @@ namespace NebLock
     [MySessionComponentDescriptor(MyUpdateOrder.Simulation)]
     public class NebLock : MySessionComponentBase
     {
+        public static NebLock I;
+
         private bool mpActive;
         private bool server;
         private bool client;
@@ -26,6 +29,11 @@ namespace NebLock
         private List<RadarEntry> radarEntries = new List<RadarEntry>();
         private Dictionary<IMyLargeTurretBase, RadarEntry> turretTracks = new Dictionary<IMyLargeTurretBase, RadarEntry>();
         private List<IMyLargeTurretBase> deadTracks = new List<IMyLargeTurretBase>();
+
+        public NebLock()
+        {
+            I = this;
+        }
         public override void LoadData()
         {
             mpActive = MyAPIGateway.Multiplayer.MultiplayerActive;
@@ -38,7 +46,6 @@ namespace NebLock
             }
             if(client)
             {
-                TerminalActions.I.LoadData();
                 MyEntities.OnEntityCreate += TerminalActions.I.AddActions;
             }
             //shared
