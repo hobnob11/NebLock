@@ -17,12 +17,12 @@ namespace NebLock
     [MySessionComponentDescriptor(MyUpdateOrder.Simulation)]
     public class NebLock : MySessionComponentBase
     {
-        static private bool mpActive;
-        static private bool server;
-        static private bool client;
-        static private bool actionsAdded = false;
-        static public Dictionary<IMyLargeTurretBase, RadarEntry> Tracks = new Dictionary<IMyLargeTurretBase, RadarEntry>();
-        static readonly private List<IMyLargeTurretBase> deadTracks = new List<IMyLargeTurretBase>();
+        public static NebLock I = new NebLock();
+        private bool mpActive;
+        private bool server;
+        private bool client;
+        public Dictionary<IMyLargeTurretBase, RadarEntry> Tracks = new Dictionary<IMyLargeTurretBase, RadarEntry>();
+        private List<IMyLargeTurretBase> deadTracks = new List<IMyLargeTurretBase>();
         public override void LoadData()
         {
             mpActive = MyAPIGateway.Multiplayer.MultiplayerActive;
@@ -78,6 +78,7 @@ namespace NebLock
         {
             TerminalActions.I.RadarEntries = null;
             Tracks = null;
+            deadTracks = null;
         }
     }
 }
