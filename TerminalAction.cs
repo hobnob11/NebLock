@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Sandbox.ModAPI;
 using Sandbox.ModAPI.Interfaces.Terminal;
+using VRage.Game.Entity;
 using VRage.Utils;
 
 using RadarEntry = NebRadarAPI.API.NebRadarAPI.RadarEntry;
@@ -14,25 +15,28 @@ namespace NebLock
     {
         public static TerminalActions I = new TerminalActions();
         public List<RadarEntry> RadarEntries = new List<RadarEntry>();
-        public void AddActions(IMyTerminalBlock block, List<IMyTerminalAction> actions)
+        public bool actionsAdded = false;
+        public void AddActions(MyEntity e)
         {
-            if(block is IMyLargeTurretBase)
+            if(e is IMyLargeTurretBase && !actionsAdded)
             {
+                actionsAdded = true;
+
                 var actionLock = MyAPIGateway.TerminalControls.CreateAction<IMyLargeTurretBase>("NebLock_LockTarget");
                 actionLock.Name = new StringBuilder("Focus on Locked Radar Target");
                 actionLock.Icon = @"Textures\GUI\Icons\Actions\Toggle.dds";
                 actionLock.Action = OnLockButtonPressed;
                 actionLock.Enabled = (_) => true;
-                actions.Add(actionLock);
-                //MyAPIGateway.TerminalControls.AddAction<IMyLargeTurretBase>(actionLock);
+                MyAPIGateway.TerminalControls.AddAction<IMyLargeTurretBase>(actionLock);
                 
                 var actionUnlock = MyAPIGateway.TerminalControls.CreateAction<IMyLargeTurretBase>("NebLock_UnlockTarget");
                 actionUnlock.Name = new StringBuilder("Stop Focusing on Radar Target");
                 actionUnlock.Icon = @"Textures\GUI\Icons\Actions\Toggle.dds";
                 actionUnlock.Action = OnUnlockLockButtonPressed;
                 actionUnlock.Enabled = (_) => true;
-                actions.Add(actionUnlock);
-                //MyAPIGateway.TerminalControls.AddAction<IMyLargeTurretBase>(actionUnlock);
+                MyAPIGateway.TerminalControls.AddAction<IMyLargeTurretBase>(actionUnlock);
+
+                MyAPIGateway.Utilities.ShowNotification("NebLock Actions Added.", 5000);
             }
         }
 

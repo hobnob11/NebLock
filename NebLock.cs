@@ -36,7 +36,7 @@ namespace NebLock
             }
             if(client)
             {
-                MyAPIGateway.TerminalControls.CustomActionGetter += TerminalActions.I.AddActions;
+                MyEntities.OnEntityCreate += TerminalActions.I.AddActions;
             }
         }
         private void OnRadarAPIReady()
