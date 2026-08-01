@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Sandbox.ModAPI;
-using Sandbox.ModAPI.Interfaces.Terminal;
 using VRage.Game.Entity;
 using VRage.Utils;
-
-using RadarEntry = NebRadarAPI.API.NebRadarAPI.RadarEntry;
 
 namespace NebLock
 {
@@ -45,12 +40,12 @@ namespace NebLock
                 var turret = block as IMyLargeTurretBase;
                 NebLock.I.PacketTurretTrack.Setup(turret.EntityId, true);
                 NebLock.I.Net.SendToServer(NebLock.I.PacketTurretTrack);
-                MyAPIGateway.Utilities.ShowNotification($"Lock button pressed clientside", 2000);
+                //MyAPIGateway.Utilities.ShowNotification($"Lock button pressed clientside", 2000);
             }
             catch (Exception e)
             {
-                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on clientside lock", 5000);
-                MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
+                //MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on clientside lock", 5000);
+                //MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
                 MyLog.Default.WriteLineAndConsole($"NebLock Error Logged on clientside lock!\n{e.Message}\n{e.TargetSite}\n{e.StackTrace}");
                 MyLog.Default.WriteLineAndConsole(e.ToString());
             }
@@ -62,12 +57,12 @@ namespace NebLock
                 var turret = block as IMyLargeTurretBase;
                 NebLock.I.PacketTurretTrack.Setup(turret.EntityId, false);
                 NebLock.I.Net.SendToServer(NebLock.I.PacketTurretTrack);
-                MyAPIGateway.Utilities.ShowNotification($"Unlock button pressed clientside", 2000);
+                //MyAPIGateway.Utilities.ShowNotification($"Unlock button pressed clientside", 2000);
             }
             catch (Exception e)
             {
-                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on clientside unlock!", 5000);
-                MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
+                //MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on clientside unlock!", 5000);
+                //MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
                 MyLog.Default.WriteLineAndConsole($"NebLock Error Logged on clientside unlock!\n{e.Message}\n{e.TargetSite}\n{e.StackTrace}");
                 MyLog.Default.WriteLineAndConsole(e.ToString());
             }

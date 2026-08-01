@@ -7,9 +7,6 @@ using VRageMath;
 using RadarEntry = NebRadarAPI.API.NebRadarAPI.RadarEntry;
 using Sandbox.Game.Entities;
 using Digi.NetworkLib;
-using Sandbox.Definitions;
-using EmptyKeys.UserInterface.Generated.ContractsBlockView_Gamepad_Bindings;
-
 
 namespace NebLock
 {
@@ -50,11 +47,10 @@ namespace NebLock
             }
             //shared
             Net = new Network(NetworkID, ModContext.ModName);
-            Net.ExceptionHandler = (e) => { MyAPIGateway.Utilities.ShowNotification("NebLock Networking Exception!", 5000);
+            Net.ExceptionHandler = (e) => { //MyAPIGateway.Utilities.ShowNotification("NebLock Networking Exception!", 5000);
                 MyLog.Default.WriteLineAndConsole($"NebLock Networking Exception!\n{e.Message}\n{e.TargetSite}\n{e.StackTrace}");
             };
-            Net.ErrorHandler = (e) => {
-                MyAPIGateway.Utilities.ShowNotification("NebLock Networking Error!", 5000);
+            Net.ErrorHandler = (e) => { //MyAPIGateway.Utilities.ShowNotification("NebLock Networking Error!", 5000);
                 MyLog.Default.WriteLineAndConsole($"NebLock Networking Error!\n{e}");
             };
 
@@ -73,19 +69,27 @@ namespace NebLock
             {
                 //get turret from network packet
                 var turret = MyAPIGateway.Entities.GetEntityById(packet.TurretId) as IMyLargeTurretBase;
-                if (turret == null) { MyAPIGateway.Utilities.ShowNotification($"Turret not found serverside", 2000); return; }
+                if (turret == null) 
+                { 
+                    //MyAPIGateway.Utilities.ShowNotification($"Turret not found serverside", 2000);
+                    return; 
+                }
                 
                 //if true, locking target, if false, unlocking target.
                 if (packet.Locking)
                 {
                     List<IMyFunctionalBlock> radarBlocks = new List<IMyFunctionalBlock>();
                     NebRadarAPI.API.NebRadarAPI.GetAllRadarBlocks(turret.CubeGrid, radarBlocks);
-                    if (radarBlocks.Count == 0) { MyAPIGateway.Utilities.ShowNotification("No radars found.", 2000); }
+                    if (radarBlocks.Count == 0) 
+                    { 
+                        //MyAPIGateway.Utilities.ShowNotification("No radars found.", 2000);
+                        return;
+                    }
 
                     radarEntries.Clear();
                     NebRadarAPI.API.NebRadarAPI.GetAllRadarEntries(turret.CubeGrid, radarEntries);
 
-                    MyAPIGateway.Utilities.ShowNotification($"Found {radarEntries.Count} entries", 2000);
+                    //MyAPIGateway.Utilities.ShowNotification($"Found {radarEntries.Count} entries", 2000);
 
                     RadarEntry target = default(RadarEntry);
                     foreach (var entry in radarEntries)
@@ -93,25 +97,25 @@ namespace NebLock
                         if (entry.IsLocked)
                         {
                             target = entry;
-                            MyAPIGateway.Utilities.ShowNotification($"Locked: {entry.Name}", 2000);
+                            //MyAPIGateway.Utilities.ShowNotification($"Locked: {entry.Name}", 2000);
                             break;
                         }
                     }
                     if (!target.IsLocked)
                     {
-                        MyAPIGateway.Utilities.ShowNotification("No locked entry found", 2000); return;
+                        //MyAPIGateway.Utilities.ShowNotification("No locked entry found", 2000); return;
                     }
                     turretTracks[turret] = target;
-                    MyAPIGateway.Utilities.ShowNotification($"Tracks Count: {turretTracks.Count}", 2000);
+                    //MyAPIGateway.Utilities.ShowNotification($"Tracks Count: {turretTracks.Count}", 2000);
                 } else {
                     turretTracks.Remove(turret);
-                    MyAPIGateway.Utilities.ShowNotification($"Track Removed, Count: {turretTracks.Count}", 2000);
+                    //MyAPIGateway.Utilities.ShowNotification($"Track Removed, Count: {turretTracks.Count}", 2000);
                 }
             }
             catch (Exception e)
             {
-                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on Action!", 5000);
-                MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
+                //MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on Action!", 5000);
+                //MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
                 MyLog.Default.WriteLineAndConsole($"NebLock Error Logged on Action!\n{e.Message}\n{e.TargetSite}\n{e.StackTrace}");
                 MyLog.Default.WriteLineAndConsole(e.ToString());
             }
@@ -130,7 +134,7 @@ namespace NebLock
                         if (e == null || !NebRadarAPI.API.NebRadarAPI.CanSee(turret.CubeGrid, e))
                         {
                             deadTracks.Add(turret);
-                            MyAPIGateway.Utilities.ShowNotification("Radar Track Lost!", 2000);
+                            //MyAPIGateway.Utilities.ShowNotification("Radar Track Lost!", 2000);
                             continue;
                         }
                         //todo: add errors
@@ -143,8 +147,8 @@ namespace NebLock
                 }
             } catch (Exception e)
             {
-                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on Session Serverside!", 5000);
-                MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
+                //MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on Session Serverside!", 5000);
+                //MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
                 MyLog.Default.WriteLineAndConsole($"NebLock Error Logged on Serverside!\n{e.Message}\n{e.TargetSite}\n{e.StackTrace}");
             }
         }
