@@ -70,8 +70,9 @@ namespace NebLock
                 }
             } catch (Exception e)
             {
-                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged!", 2000);
-                MyLog.Default.WriteLineAndConsole(e.ToString());
+                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on Session!!", 5000);
+                MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
+                MyLog.Default.WriteLineAndConsole($"NebLock Error Logged on Action!\n{e.Message}\n{e.TargetSite}\n{e.StackTrace}");
             }
         }
 
