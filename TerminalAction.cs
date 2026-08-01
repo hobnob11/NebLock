@@ -14,8 +14,13 @@ namespace NebLock
     public class TerminalActions
     {
         public static TerminalActions I = new TerminalActions();
-        public List<RadarEntry> RadarEntries = new List<RadarEntry>();
         public bool actionsAdded = false;
+        PacketTurretTrack PacketTurretTrack = null;
+        
+        public void LoadData(NebLock sessionInstance)
+        {
+            PacketTurretTrack = new PacketTurretTrack();
+        }
         public void AddActions(MyEntity e)
         {
             if(e is IMyLargeTurretBase && !actionsAdded)
@@ -39,46 +44,20 @@ namespace NebLock
                 MyAPIGateway.Utilities.ShowNotification("NebLock Actions Added.", 5000);
             }
         }
-
         private void OnLockButtonPressed(IMyTerminalBlock block)
         {
             try
             {
-                List<IMyFunctionalBlock> radarBlocks = new List<IMyFunctionalBlock>();
-                NebRadarAPI.API.NebRadarAPI.GetAllRadarBlocks(block.CubeGrid, radarBlocks);
-
-                if (radarBlocks.Count == 0) { MyAPIGateway.Utilities.ShowNotification("No radars found.", 2000); }
-
-                I.RadarEntries.Clear();
-                NebRadarAPI.API.NebRadarAPI.GetAllRadarEntries(block.CubeGrid, I.RadarEntries);
-
-                MyAPIGateway.Utilities.ShowNotification($"Found {I.RadarEntries.Count} entries", 2000);
-
-                RadarEntry target = default(RadarEntry);
-                foreach (var entry in I.RadarEntries)
-                {
-                    if (entry.IsLocked)
-                    {
-                        target = entry;
-                        MyAPIGateway.Utilities.ShowNotification($"Locked: {entry.Name}", 2000);
-                        break;
-                    }
-                }
-                if (!target.IsLocked)
-                {
-                    MyAPIGateway.Utilities.ShowNotification("No locked entry found", 2000); return;
-                }
-
                 var turret = block as IMyLargeTurretBase;
-                NebLock.Tracks[turret] = target;
-                MyAPIGateway.Utilities.ShowNotification($"Tracks Count: {NebLock.Tracks.Count}", 2000);
-
+                PacketTurretTrack.Setup(turret.EntityId, true);
+                
+                MyAPIGateway.Utilities.ShowNotification($"Lock button pressed clientside", 2000);
             }
             catch (Exception e)
             {
-                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on Action!", 5000);
+                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on clientside lock", 5000);
                 MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
-                MyLog.Default.WriteLineAndConsole($"NebLock Error Logged on Action!\n{e.Message}\n{e.TargetSite}\n{e.StackTrace}");
+                MyLog.Default.WriteLineAndConsole($"NebLock Error Logged on clientside lock!\n{e.Message}\n{e.TargetSite}\n{e.StackTrace}");
                 MyLog.Default.WriteLineAndConsole(e.ToString());
             }
         }
@@ -87,14 +66,14 @@ namespace NebLock
             try
             {
                 var turret = block as IMyLargeTurretBase;
-                NebLock.Tracks.Remove(turret);
-                MyAPIGateway.Utilities.ShowNotification($"Track Removed, Count: {NebLock.Tracks.Count}", 2000);
+
+                MyAPIGateway.Utilities.ShowNotification($"Unlock button pressed clientside", 2000);
             }
             catch (Exception e)
             {
-                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on Action2!", 5000);
+                MyAPIGateway.Utilities.ShowNotification("NebLock Error Logged on clientside unlock!", 5000);
                 MyAPIGateway.Utilities.ShowNotification(e.Message, 5000);
-                MyLog.Default.WriteLineAndConsole($"NebLock Error Logged on Action2!\n{e.Message}\n{e.TargetSite}\n{e.StackTrace}");
+                MyLog.Default.WriteLineAndConsole($"NebLock Error Logged on clientside unlock!\n{e.Message}\n{e.TargetSite}\n{e.StackTrace}");
                 MyLog.Default.WriteLineAndConsole(e.ToString());
             }
         }
