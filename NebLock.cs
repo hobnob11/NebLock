@@ -11,7 +11,6 @@ using System.Linq;
 using VRage.Game.Entity;
 using Sandbox.Game.Screens.Helpers;
 using System.Reflection;
-using Sandbox.ModAPI.Interfaces.Terminal;
 
 namespace NebLock
 {
@@ -34,27 +33,15 @@ namespace NebLock
             {
                 NebRadarAPI.API.NebRadarAPI.Load(OnRadarAPIReady);
             }
-            if (client)
+            if(client)
             {
-                MyAPIGateway.TerminalControls.CustomActionGetter += OnCustomActionGet;
+                MyAPIGateway.TerminalControls.CustomActionGetter += TerminalActions.I.AddActions;
             }
         }
         private void OnRadarAPIReady()
         {
             MyAPIGateway.Utilities.ShowNotification("NebRadar API connected", 2000);
         }
-
-        private void OnCustomActionGet(IMyTerminalBlock block, List<IMyTerminalAction> actions)
-        {
-            if (!actionsAdded)
-            {
-                actionsAdded = true;
-                TerminalActions.AddActions();
-                MyAPIGateway.TerminalControls.CustomActionGetter -= OnCustomActionGet;
-                MyAPIGateway.Utilities.ShowNotification("hellloooooo", 2000);
-            }
-        }
-
         public override void Simulate()
         {
             try
@@ -89,7 +76,7 @@ namespace NebLock
 
         protected override void UnloadData()
         {
-            TerminalActions.RadarEntries = null;
+            TerminalActions.I.RadarEntries = null;
             Tracks = null;
         }
     }
